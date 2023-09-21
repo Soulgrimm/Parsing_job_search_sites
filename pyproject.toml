@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "parsing-job-search-sites"
+version = "0.1.0"
+description = ""
+authors = ["pavel <Dante94_94@bk.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+isodate = "^0.6.1"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
