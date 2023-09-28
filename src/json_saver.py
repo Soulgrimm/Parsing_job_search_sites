@@ -2,16 +2,26 @@ import json
 
 
 class JsonSaver:
+    """
+    Класс сохранения вакансий в json файл.
+    """
+    def json_save_file(self, vacancies):
+        vacansy_list = []
+        for vacancy in vacancies:
+            test = {
+                'Профессия': vacancy.title,
+                'Ссылка на вакансию': vacancy.url,
+                'Средняя заработная плата': vacancy.salary,
+                'Требование': vacancy.requirements,
+            }
 
-    def json_save_file(self, data):
-        with open(data, 'w', encoding='utf-8') as f:
-            json.dump(data, f)
+            vacansy_list.append(test)
 
-    def add_vacancy(self):
-        pass
+        with open('src/test.json', 'w', encoding='utf-8') as f:
+            json.dump(vacansy_list, f, ensure_ascii=False, indent=4)
 
-    def get_vacancy_by_salary(self):
-        pass
-
-    def delete_vacancy(self):
-        pass
+    @staticmethod
+    def get_all_vac_from_json():
+        with open('src/test.json', encoding='utf-8') as f:
+            all_vacancies = json.load(f)
+            return all_vacancies

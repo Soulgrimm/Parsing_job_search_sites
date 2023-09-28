@@ -3,20 +3,30 @@ import requests
 import json
 import os
 
+SJ_TOKEN: str = os.getenv('SJ_TOKEN')
+
 
 class ApiJobSites(ABC):
+    """
+    Абстрактный класс для работы с API сайтов.
+    """
 
     @abstractmethod
     def get_vacancy(self):
+        """
+        Получение вакансий с НН и SJ по API.
+        :param keyword: Слово для поиска вакансий.
+        :return: список вакансий.
+        """
         pass
 
 
 class HeadHunterAPI(ApiJobSites):
     HH_API = 'https://api.hh.ru/vacancies'
 
-    def __init__(self):
-        self.params = {
-            'text': 'NAME:Python',
+    def __init__(self, keyword: str):
+        self.params: dict = {
+            'text': keyword,
             'area': '1',
             'per_page': 50,
         }
@@ -24,27 +34,25 @@ class HeadHunterAPI(ApiJobSites):
     def get_vacancy(self):
         req = requests.get(self.HH_API, self.params)
         data = req.content.decode()
-        json_ = json.loads(data)['items']
-        return json_
+        json_data = json.loads(data)['items']
+        return json_data
 
 
 class SuperJobApi(ApiJobSites):
-    SJ_TOKEN = 'v3.r.137842005.f44f0a409ab4258b573222ef0f012d62aa7e8944.0880308108dd4c9628b6133b5499382d1c338a6e'
-    # SJ_TOKEN: str = os.getenv('YT_API_KEY')
     SJ_API = 'https://api.superjob.ru/2.0/vacancies/'
 
-    def __init__(self):
-        self.params = {
-            'keyword': 'python',
+    def __init__(self, keyword: str):
+        self.params: dict = {
+            'keyword': keyword,
             'count': 50,
             'town': 'Москва',
         }
 
     def get_vacancy(self):
         headers = {
-            'X-Api-App-Id': self.SJ_TOKEN
+            'X-Api-App-Id': SJ_TOKEN
         }
         req = requests.get(self.SJ_API, headers=headers, params=self.params)
         data = req.content.decode()
-        json_ = json.loads(data)
-        return json_
+        json_data = json.loads(data)['objects']
+        return json_data
